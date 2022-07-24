@@ -23,7 +23,18 @@ class Auth extends CI_Controller {
 		$AuthCheckLogin= $this->Login->CheckLoginUser($DataPostForm);
 
 		if ($AuthCheckLogin->num_rows()>0) {
+			$user = $AuthCheckLogin->row();
+			$data = [
+						'username' =>$user->username,
+						'level' =>$user->level,
+						'status' => 'login'
+					];
+					$this->session->set_userdata($data);
+			if ($user->level == 1) {
 			redirect('dashboard','refresh');
+			}else{
+				redirect('kasir','refresh');
+			}
 		}else{
 			redirect('auth','refresh');
 		}
